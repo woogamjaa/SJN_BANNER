@@ -7,11 +7,8 @@ function NukkiTab() {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState('');
 
-  // AI 민감도 조절용 임시 파라미터 (기본 100%)
-  const [contrastVal, setContrastVal] = useState(130);
-
-  // 1. AI 인식을 위해 대비만 변경한 '검사용 Blob' 생성
-  const createInspectionBlob = (file, contrast) => {
+  // 1. AI 검사용 임시 이미지 (명암 조절)
+  const createInspectionBlob = (file) => {
     return new Promise((resolve) => {
       const img = new Image();
       const objectUrl = URL.createObjectURL(file);
@@ -23,8 +20,7 @@ function NukkiTab() {
         canvas.width = img.width;
         canvas.height = img.height;
 
-        // 경계선 감지를 위한 대비/밝기 필터 적용
-        ctx.filter = `contrast(${contrast}%) brightness(95%)`;
+        ctx.filter = 'contrast(140%) brightness(100%)';
         ctx.drawImage(img, 0, 0);
 
         URL.revokeObjectURL(objectUrl);
@@ -33,7 +29,7 @@ function NukkiTab() {
     });
   };
 
-  // 2. AI가 뽑아낸 누끼 마스크를 '원본 이미지'에 합성하여 순수 원본 색상 복원
+  // 2. AI 마스크 기반 투명 PNG 생성 (검은 배경 완전 제거)
   const applyMaskToOriginal = (originalFile, aiMaskBlob) => {
     return new Promise((resolve) => {
       const origImg = new Image();
@@ -51,16 +47,20 @@ function NukkiTab() {
           canvas.width = origImg.width;
           canvas.height = origImg.height;
 
-          // ① AI 결과물(마스크)을 먼저 그림
+          // 💡 핵심: 캔버스 전체 투명으로 완전 초기화
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // ① AI 마스크 이미지 그리기
           ctx.drawImage(maskImg, 0, 0);
 
-          // ② Alpha Mask 알파 연산 설정: 기존 알파 영역에 원본 이미지만 덮어씌움
+          // ② 마스크의 알파 영역(형태)에만 원본 이미지를 채움
           ctx.globalCompositeOperation = 'source-in';
           ctx.drawImage(origImg, 0, 0);
 
           URL.revokeObjectURL(origUrl);
           URL.revokeObjectURL(maskUrl);
 
+          // 투명 채널 유지 PNG 변환
           canvas.toBlob((blob) => resolve(URL.createObjectURL(blob)), 'image/png');
         };
       };
@@ -74,22 +74,19 @@ function NukkiTab() {
     setProgress('AI 분석 준비 중...');
 
     try {
-      // Step A: 검사 전용 보정 이미지 생성
-      const inspectBlob = await createInspectionBlob(file, contrastVal);
+      const inspectBlob = await createInspectionBlob(file);
 
-      // Step B: AI 배경 제거 진행 (마스크 추출)
       const maskBlob = await removeBackground(inspectBlob, {
         progress: (key, current, total) => {
           if (total) {
             const percent = Math.round((current / total) * 100);
-            setProgress(`배경 감지 중... (${percent}%)`);
+            setProgress(`배경 분석 중... (${percent}%)`);
           } else {
-            setProgress('마스크 추출 중...');
+            setProgress('마스크 처리 중...');
           }
         }
       });
 
-      // Step C: AI 마스크 영역을 '원본 파일'에 마스킹하여 원본 색상 추출
       const finalOriginalResultUrl = await applyMaskToOriginal(file, maskBlob);
       setResultSrc(finalOriginalResultUrl);
     } catch (error) {
@@ -111,7 +108,7 @@ function NukkiTab() {
       <div style={{ textAlign: 'center', marginBottom: '30px' }}>
         <h2>✂️ AI 자동 누끼 따기</h2>
         <p style={{ color: '#aaa', fontSize: '0.9rem' }}>
-          서버 전송 없이 브라우저에서 배경을 제거합니다. (결과물은 원본 색상 그대로 유지됩니다.)
+          서버 전송 없이 브라우저에서 투명 PNG 누끼를 추출합니다.
         </p>
       </div>
 
@@ -139,7 +136,7 @@ function NukkiTab() {
 
         {resultSrc && (
           <div style={{ flex: '1', minWidth: '280px', background: '#1e1e1e', padding: '15px', borderRadius: '10px', textAlign: 'center' }}>
-            <h4 style={{ marginBottom: '10px', color: '#fff' }}>누끼 결과물 (순수 원본)</h4>
+            <h4 style={{ marginBottom: '10px', color: '#fff' }}>누끼 결과물 (투명 PNG)</h4>
             <div style={{ 
               backgroundImage: 'linear-gradient(45deg, #2a2a2a 25%, transparent 25%), linear-gradient(-45deg, #2a2a2a 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #2a2a2a 75%), linear-gradient(-45deg, transparent 75%, #2a2a2a 75%)',
               backgroundSize: '20px 20px',
@@ -153,7 +150,7 @@ function NukkiTab() {
             <br />
             <a href={resultSrc} download="nukki_result.png">
               <button className="dl-btn" style={{ marginTop: '15px', width: '100%' }}>
-                📥 원본 색상 PNG 다운로드
+                📥 투명 PNG 다운로드
               </button>
             </a>
           </div>
