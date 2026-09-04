@@ -109,9 +109,9 @@ function NukkiTab() {
         <h2>✂️ AI 자동 누끼 따기</h2>
         <p style={{ color: '#aaa', fontSize: '0.9rem' }}>
           이미지를 업로드 시키면 자동으로 누끼본을 제공드립니다!
-          <br>
+          <br />
           연출컷, 배경이 복잡한 경우 누끼가 올바르게 작동하지 않습니다.
-          </br>
+       
         </p>
       </div>
 
