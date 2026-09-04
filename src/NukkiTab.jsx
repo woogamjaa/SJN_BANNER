@@ -108,7 +108,10 @@ function NukkiTab() {
       <div style={{ textAlign: 'center', marginBottom: '30px' }}>
         <h2>✂️ AI 자동 누끼 따기</h2>
         <p style={{ color: '#aaa', fontSize: '0.9rem' }}>
-          서버 전송 없이 브라우저에서 투명 PNG 누끼를 추출합니다.
+          이미지를 업로드 시키면 자동으로 누끼본을 제공드립니다!
+          <br>
+          연출컷, 배경이 복잡한 경우 누끼가 올바르게 작동하지 않습니다.
+          </br>
         </p>
       </div>
 
@@ -150,7 +153,7 @@ function NukkiTab() {
             <br />
             <a href={resultSrc} download="nukki_result.png">
               <button className="dl-btn" style={{ marginTop: '15px', width: '100%' }}>
-                📥 투명 PNG 다운로드
+                PNG 다운로드
               </button>
             </a>
           </div>
