@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import removeBackground from '@imgly/background-removal';
+import { removeBackground } from '@imgly/background-removal';
 
 function NukkiTab() {
   const [imageSrc, setImageSrc] = useState(null);
@@ -40,11 +40,12 @@ function NukkiTab() {
   };
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '20px', color: '#fff' }}>
-      <div style={{ textAlign: 'center', marginBottom: '25px' }}>
+    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '50px', color: '#6b6767' }}>
+      <div style={{ textAlign: 'center', marginBottom: '50px' }}>
         <h2>✂️ AI 자동 누끼 따기</h2>
         <p style={{ color: '#aaa', fontSize: '0.9rem' }}>
           이미지를 업로드하면 서버 전송 없이 브라우저에서 배경을 투명하게 제거합니다.
+          완벽하게 따진 못합니다ㅠ 천천히 기다려 주시고 급한 경우에만 사용해주세요.
         </p>
       </div>
 
