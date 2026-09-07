@@ -14,16 +14,20 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-image: url('./bg-Chiikawa.jpg');
+  background-repeat: repeat;
+  background-size: 300px 300px;
+  animation: moveBackground 30s linear infinite;
 }
 
-/* 헤더 스타일 */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #fff;
+  background-color: #fff; 
   border-bottom: 1px solid #e5e5e5;
+  z-index: 10; 
 }
 
 .logo {
@@ -31,17 +35,6 @@ body {
   font-size: 1.25rem;
 }
 
-.help-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1px solid #ccc;
-  background: #fff;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-/* 메인 컨텐츠 레이아웃 */
 .content {
   display: flex;
   flex-direction: column;
@@ -53,15 +46,31 @@ body {
   width: 100%;
 }
 
+@keyframes moveBackground {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 120px 120px; 
+  }
+}
+
 .control-panel {
   width: 100%;
   background: #fff;
   padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-radius: 6px;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+}
+
+.control-panel-wrapper {
+  background-color: #ffced7;
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .option-group {
@@ -88,7 +97,6 @@ body {
   cursor: pointer;
 }
 
-/* 컬러 피커 스타일 */
 .color-picker-wrapper {
   display: flex;
   align-items: center;
@@ -109,7 +117,6 @@ body {
   color: #666;
 }
 
-/* 업로드 버튼 */
 .file-upload-btn {
   background-color: #222;
   color: #fff;
@@ -124,7 +131,6 @@ body {
   background-color: #444;
 }
 
-/* 썸네일 미리보기 영역 */
 .preview-panel {
   display: flex;
   flex-direction: column;
@@ -134,7 +140,7 @@ body {
 }
 
 .canvas-wrapper {
-  background-color: #e0e0e0;
+  background-color: #ffced7;
   padding: 10px;
   border-radius: 8px;
   display: flex;
@@ -144,7 +150,6 @@ body {
   overflow: hidden;
 }
 
-/* 화면 크기에 맞춰 가변 응답형 처리 */
 .thumbnail-canvas {
   max-width: 100%;
   height: auto !important;
@@ -152,7 +157,6 @@ body {
   background-color: #fff;
 }
 
-/* 다운로드 버튼 */
 .download-buttons {
   display: flex;
   gap: 1rem;

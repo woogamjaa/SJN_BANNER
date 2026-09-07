@@ -127,6 +127,7 @@ function BannerTab() {
 
   return (
     <main className="content">
+      <div className="control-panel-wrapper">
       <section className="control-panel">
         <div className="option-group">
           <span className="group-title">타입 선택</span>
@@ -197,6 +198,7 @@ function BannerTab() {
           )}
         </div>
       </section>
+      </div>
 
       <section className="preview-panel">
         <div className="canvas-wrapper">
