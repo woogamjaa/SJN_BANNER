@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import BannerTab from './BannerTab';
 import NukkiTab from './NukkiTab';
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   // 기본 상태를 'banner'로 설정하여 접속 시 바로 썸네일 제작이 보이도록 함
@@ -51,8 +52,10 @@ function App() {
       {/* 탭 상태에 따른 화면 전환 (새로고침 없이 빠른 전환) */}
       {activeTab === 'banner' && <BannerTab />}
       {activeTab === 'nukki' && <NukkiTab />}
+      <Analytics />
     </div>
   );
 }
+
 
 export default App;
