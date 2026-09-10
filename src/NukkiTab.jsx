@@ -110,6 +110,7 @@ function NukkiTab() {
             <br />
             <span style={{ color: '#888', fontSize: '0.85rem' }}>
               * 연출컷이나 배경이 복잡한 경우 누끼가 올바르게 작동하지 않을 수 있습니다.
+              <br /> (무료 누끼 API버전 사용으로 완벽한 누끼를 기대하기엔 아쉬울 수 있습니다.)
             </span>
           </p>
 
